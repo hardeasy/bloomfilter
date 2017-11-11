@@ -24,4 +24,14 @@ func TestBloomFilter_hashStrs(t *testing.T) {
 func TestBloomFilter_Add(t *testing.T) {
 	b := NewBloomFilter(5)
 	b.Add("haha")
+	b.Add("hahas")
+}
+
+func TestBloomFilter_Check(t *testing.T) {
+	b := NewBloomFilter(5)
+	b.Add("haha")
+	b.Add("haha2")
+	b.Add("haha3")
+	ok := b.Check("haha3")
+	t.Log("in", ok)
 }

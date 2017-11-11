@@ -1,8 +1,6 @@
 package bloomfilter
 
-import (
-	"fmt"
-)
+//"fmt"
 
 type bloomFilter struct {
 	data     []byte
@@ -17,7 +15,7 @@ var seed []int = []int{3, 5, 7, 11, 13, 31, 37, 45}
 func (self *bloomFilter) Add(strs string) error {
 	//hash值数组
 	hasharr := self.hashStrs(strs)
-	fmt.Println(hasharr)
+	//fmt.Println(hasharr)
 
 	//存储
 	var byteIndex int64
@@ -32,16 +30,28 @@ func (self *bloomFilter) Add(strs string) error {
 		self.data[byteIndex] = (temp << uint(bitIndex)) | self.data[byteIndex]
 		//fmt.Printf("after:%b\n", self.data[byteIndex])
 	}
-	fmt.Printf("selft.data:%b\n", self.data)
+	//fmt.Printf("selft.data:%b\n", self.data)
 	return nil
 }
 
 //检测值
 func (self *bloomFilter) Check(strs string) bool {
 	//hash值数组
+	hasharr := self.hashStrs(strs)
+	var byteIndex int64
+	var bitIndex int64
+	var temp byte
 
+	for i := 0; i < len(hasharr); i++ {
+		byteIndex = hasharr[i] / 8
+		bitIndex = hasharr[i] % 8
+		temp = 1
+		if (self.data[byteIndex] & (temp << uint(bitIndex))) == 0 {
+			return false
+		}
+	}
 	//检测
-	return false
+	return true
 }
 
 //得到hash值数组
