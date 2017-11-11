@@ -9,7 +9,7 @@ type bloomFilter struct {
 }
 
 //初始值数组
-var seed []int = []int{3, 5, 7, 11, 13, 31, 37, 45}
+var seed []int = []int{3, 5, 7, 11, 13, 31, 37}
 
 //添加值
 func (self *bloomFilter) Add(strs string) error {
@@ -67,10 +67,11 @@ func (self *bloomFilter) hashStrs(strs string) []int64 {
 
 //单个hash值
 func (self *bloomFilter) hash(strs string, seed int) int64 {
-	hash := seed
+	hash := 5381
 	for i := 0; i < len(strs)-1; i++ {
 		hash += (hash << 5) + int(strs[i])
 	}
+	hash += seed
 	return int64(hash) % self.bitSize
 }
 
